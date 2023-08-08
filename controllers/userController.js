@@ -130,6 +130,7 @@ module.exports.order = (request, response) => {
     .then((productsWithCalculatedTotal) => {
       const order = new Order({
         userId: request.user.id,
+        userName: request.user.name,
         products: productsWithCalculatedTotal,
         totalAmount,
       });
@@ -140,7 +141,6 @@ module.exports.order = (request, response) => {
       return response.status(201).json({
         message: "Order created successfully",
         data: savedOrder,
-        totalAmount,
       });
     })
     .catch((error) => {
@@ -149,4 +149,23 @@ module.exports.order = (request, response) => {
         error: error.message,
       });
     });
+};
+
+// set user as admin
+module.exports.setAsAdmin = (request, response) => {
+  let set_asAdmin = {
+    isAdmin: true,
+  };
+  return User.findByIdAndUpdate(request.params.id, set_asAdmin)
+    .then((result, error) => {
+      if (error) {
+        return response.send({
+          message: error.message,
+        });
+      }
+      return response.send({
+        message: "User has been set to admin",
+      });
+    })
+    .catch((error) => console.log(error));
 };
