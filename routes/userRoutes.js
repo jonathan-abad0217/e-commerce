@@ -27,4 +27,16 @@ router.post("/order", auth.verify, (request, response) => {
   userController.order(request, response);
 });
 
+// Add to cart
+
+// Set user as admin (admin only)
+router.put(
+  "/:id/setAsAdmin",
+  auth.verify,
+  auth.verifyAdmin,
+  (request, response) => {
+    userController.setAsAdmin(request, response);
+  }
+);
+
 module.exports = router;
