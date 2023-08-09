@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const auth = require("../auth");
 const User = require("../models/User");
 const Product = require("../models/Product");
+const Cart = require("../models/Cart");
 const Order = require("../models/Order");
 
 module.exports.registerUser = (user_body) => {
@@ -62,6 +63,31 @@ module.exports.loginUser = (request, response) => {
       }
     })
     .catch((error) => response.send(error));
+};
+
+module.exports.getAllOrders = (request, response) => {
+  return Order.find({}).then((orders) => {
+    return response.send(orders);
+  });
+};
+
+module.exports.getUserOrders = async (request, response) => {
+  const userId = request.user.id;
+
+  try {
+    const orders = await Order.find({ userId });
+
+    if (!orders || orders.length === 0) {
+      return response.json({ message: "No orders found for the user" });
+    }
+    response.json({
+      message: "User's orders retrieved successfully",
+      data: orders,
+    });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: "Internal server error" });
+  }
 };
 
 module.exports.getDetails = (user) => {
@@ -168,4 +194,97 @@ module.exports.setAsAdmin = (request, response) => {
       });
     })
     .catch((error) => console.log(error));
+};
+
+module.exports.addToCart = async (request, response) => {
+  const userId = request.user.id;
+  const productsToAdd = request.body;
+
+  try {
+    let cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      cart = new Cart({
+        userId,
+        products: [],
+        totalAmount: 0,
+      });
+    }
+
+    for (const productInfo of productsToAdd) {
+      const { productId, quantity } = productInfo;
+      const product = await Product.findById(productId);
+
+      if (!product) {
+        return response.status(404).json({
+          error: `Product with ID ${productId} not found`,
+        });
+      }
+
+      const total = product.price * quantity;
+
+      const existingProduct = cart.products.find(
+        (p) => p.productId === productId
+      );
+      if (existingProduct) {
+        existingProduct.quantity += quantity;
+        existingProduct.total += total;
+      } else {
+        cart.products.push({
+          productId,
+          productName: product.name,
+          quantity,
+          total,
+        });
+      }
+
+      cart.totalAmount += total;
+    }
+
+    await cart.save();
+
+    return response.json({
+      message: "Products added to cart successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({
+      error: "Internal server error",
+    });
+  }
+};
+
+module.exports.placeOrder = async (request, response) => {
+  const userId = request.user.id;
+
+  try {
+    // Find the user's cart
+    const cart = await Cart.findOne({ userId });
+    if (!cart || cart.products.length === 0) {
+      return response.status(400).json({ error: "Cart is empty" });
+    }
+
+    // Create an order from the cart
+    const order = new Order({
+      userId,
+      userName: request.user.name,
+      products: cart.products,
+      totalAmount: cart.totalAmount,
+    });
+
+    // Clear the user's cart
+    cart.products = [];
+    cart.totalAmount = 0;
+    await cart.save();
+
+    // Save the order
+    await order.save();
+    console.log(order);
+    response
+      .status(201)
+      .json({ message: "Order placed successfully", data: order });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: "Internal server error" });
+  }
 };

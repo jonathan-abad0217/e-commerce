@@ -22,12 +22,20 @@ router.post("/details", (request, response) => {
   });
 });
 
+// Get all Orders
+router.get("/allOrder", auth.verify, auth.verifyAdmin, (request, response) => {
+  userController.getAllOrders(request, response);
+});
+
+// retrieve authenticated user's order
+router.get("/orders", auth.verify, (request, response) => {
+  userController.getUserOrders(request, response);
+});
+
 // Create order non admin
 router.post("/order", auth.verify, (request, response) => {
   userController.order(request, response);
 });
-
-// Add to cart
 
 // Set user as admin (admin only)
 router.put(
@@ -38,5 +46,13 @@ router.put(
     userController.setAsAdmin(request, response);
   }
 );
+
+router.post("/addToCart", auth.verify, (request, response) => {
+  userController.addToCart(request, response);
+});
+
+router.post("/place-order", auth.verify, (request, response) => {
+  userController.placeOrder(request, response);
+});
 
 module.exports = router;
