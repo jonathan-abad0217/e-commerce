@@ -14,7 +14,7 @@ app.use(cors());
 
 // Database Connection
 mongoose.connect(
-  `mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@project-x.ncwp3an.mongodb.net/project-x?retryWrites=true&w=majority`,
+  `mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@303-abad.h42yc3b.mongodb.net/capstone2?retryWrites=true&w=majority`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

@@ -1,5 +1,6 @@
 const Product = require("../models/Product.js");
 
+//create new product
 module.exports.createProduct = (product) => {
   let new_product = new Product({
     name: product.name,
@@ -21,24 +22,27 @@ module.exports.createProduct = (product) => {
     .catch((error) => console.log(error));
 };
 
+// get all prodcuts
 module.exports.getAll = (request, response) => {
   return Product.find({}).then((result) => {
     return response.send(result);
   });
 };
-
+// get active products
 module.exports.getActive = (request, response) => {
   return Product.find({ isActive: true }).then((result) => {
     return response.send(result);
   });
 };
 
+// get product by id
 module.exports.getProductById = (request, response) => {
   return Product.findById(request.params.id).then((result) => {
     return response.send(result);
   });
 };
 
+// get product by name
 module.exports.getProductByName = (request, response) => {
   return Product.findOne({
     name: {
@@ -50,6 +54,7 @@ module.exports.getProductByName = (request, response) => {
   });
 };
 
+// update product
 module.exports.updateProduct = (request, response) => {
   let updated_product = {
     name: request.body.name,
@@ -71,6 +76,7 @@ module.exports.updateProduct = (request, response) => {
     .catch((error) => console.log(error));
 };
 
+// archive/deactivate product
 module.exports.archiveProduct = (request, response) => {
   let archive_product = {
     isActive: false,
@@ -88,6 +94,8 @@ module.exports.archiveProduct = (request, response) => {
     })
     .catch((error) => console.log(error));
 };
+
+// activate product
 module.exports.activateProduct = (request, response) => {
   let activate_product = {
     isActive: true,

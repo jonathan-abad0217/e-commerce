@@ -1,0 +1,593 @@
+{
+	"info": {
+		"_postman_id": "ef2b673e-12a3-4751-832c-6b6efa86637b",
+		"name": "capstone2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21942490"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "register Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Clare\",\r\n    \"email\": \"clare@email.com\",\r\n    \"password\": \"12345\",\r\n    \"mobileNumber\": \"09204962172\",\r\n    \"address\":[\r\n        {\r\n        \"streetNumber\": \"999\",\r\n        \"barangay\": \"Panamitan\",\r\n        \"municipality\": \"Kawit\",\r\n        \"province\": \"Cavite\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"email\": \"clare@email.com\",\r\n    \"password\": \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserDetails",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"64d42141678ca0b80c42253f\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/details",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDFlMmEzYjgwYTdkMzI3MDYxNDE1YiIsImVtYWlsIjoidGVzdDFAZW1haWwuY29tIiwibmFtZSI6IlRlc3RpbmciLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjkxNDgwMzUwfQ.BJaf6tJGtadPn9dc7ouK8eXEudbrzyF2V_y1o--RMAA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"products\": [\r\n    {\r\n      \"productId\": \"64d19ca70717639348c045ad\",\r\n      \"quantity\": 3\r\n    },\r\n    {\r\n      \"productId\": \"64d19cde0717639348c045af\",\r\n      \"quantity\": 2\r\n    },\r\n    {\r\n        \"productId\": \"64d19d130717639348c045b1\",\r\n      \"quantity\": 3\r\n    }\r\n  ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "setUserToAdmin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDQyMTExNjc4Y2EwYjgwYzQyMjUzYyIsImVtYWlsIjoiYWRtaW5AZW1haWwuY29tIiwibmFtZSI6IkFkbWluIiwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjkxNjI1MDI3fQ.m9VcQU5N1e2xhHEmgt5hs98O-R93WXqHWIX2U70zQ6I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/64d42620fb186115725eb74e/setAsAdmin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"64d42620fb186115725eb74e",
+								"setAsAdmin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addToCart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDQyMTQxNjc4Y2EwYjgwYzQyMjUzZiIsImVtYWlsIjoiam9uYXRoYW5AZW1haWwuY29tIiwibmFtZSI6IkpvbmF0aGFuIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTY5MTYyNDMzMH0.mR_aq0IzV-qHrU1zaS0sAUGJa_Vg5hhsOIdxM_u1C5M",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n  \"productId\": \"64d4218d678ca0b80c422544\",\r\n  \"quantity\": 1\r\n},\r\n{\r\n    \"productId\": \"64d42237678ca0b80c42254a\",\r\n  \"quantity\": 3\r\n}]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/addToCart",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"addToCart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "removeProductFromCart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDQyMTQxNjc4Y2EwYjgwYzQyMjUzZiIsImVtYWlsIjoiam9uYXRoYW5AZW1haWwuY29tIiwibmFtZSI6IkpvbmF0aGFuIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTY5MTYyNDMzMH0.mR_aq0IzV-qHrU1zaS0sAUGJa_Vg5hhsOIdxM_u1C5M",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n  \"productId\": \"64d19ca70717639348c045ad\",\r\n  \"quantity\": 1\r\n},\r\n{\r\n    \"productId\": \"64d19cde0717639348c045af\",\r\n  \"quantity\": 1\r\n}]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/cart/64d4218d678ca0b80c422544",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"cart",
+								"64d4218d678ca0b80c422544"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "placeOrder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDQyMTQxNjc4Y2EwYjgwYzQyMjUzZiIsImVtYWlsIjoiam9uYXRoYW5AZW1haWwuY29tIiwibmFtZSI6IkpvbmF0aGFuIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTY5MTYyNDMzMH0.mR_aq0IzV-qHrU1zaS0sAUGJa_Vg5hhsOIdxM_u1C5M",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/place-order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"place-order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllOrder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDQyMTExNjc4Y2EwYjgwYzQyMjUzYyIsImVtYWlsIjoiYWRtaW5AZW1haWwuY29tIiwibmFtZSI6IkFkbWluIiwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjkxNjI1MDI3fQ.m9VcQU5N1e2xhHEmgt5hs98O-R93WXqHWIX2U70zQ6I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/allOrder",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"allOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUser'sOrder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDQyMTQxNjc4Y2EwYjgwYzQyMjUzZiIsImVtYWlsIjoiam9uYXRoYW5AZW1haWwuY29tIiwibmFtZSI6IkpvbmF0aGFuIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTY5MTYyNTA5MH0.hdXQIJOYQyRc98uTTbVRjOwqRyqcDVn4O5NhYa7FOIs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Add Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDQyMTExNjc4Y2EwYjgwYzQyMjUzYyIsImVtYWlsIjoiYWRtaW5AZW1haWwuY29tIiwibmFtZSI6IkFkbWluIiwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjkxNjIzODc3fQ.ryaGsROtYotpkSE9-hqG-NTFh9bTZDS_f0_dUezbh6E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Ice Water\",\r\n    \"description\": \"So refreshing\",\r\n    \"price\": 300\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/products/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"products",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/products/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"products",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getActive",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/products/all/active",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"products",
+								"all",
+								"active"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getProductById",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/products/64d4218d678ca0b80c422544",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"products",
+								"64d4218d678ca0b80c422544"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getProductByName",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"burger\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/products/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"products",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateProduct",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDQyNjIwZmIxODYxMTU3MjVlYjc0ZSIsImVtYWlsIjoiY2xhcmVAZW1haWwuY29tIiwibmFtZSI6IkNsYXJlIiwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjkxNjI1MTA2fQ.hPAZOvyksR-5zNb-iBk7eLQYxVID4CAOnJSIvJdOab4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Heavens Coffee\",\r\n    \"description\": \"First sip, you can slip through walls\",\r\n    \"price\": 500\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/products/64d42237678ca0b80c42254a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"products",
+								"64d42237678ca0b80c42254a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "archiveProduct",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDE5YTc2MWJlM2RjNzQ3OTBjNWIxNSIsImVtYWlsIjoiam9uYXRoYW4uYWJhZEBlbWFpbC5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2OTE0NTgyNDl9.9CYoxLmi5pkXjvChCUzXu9nzoftlbXYM6QSka8v3sCw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/products/64d421cf678ca0b80c422548/archive",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"products",
+								"64d421cf678ca0b80c422548",
+								"archive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "activateProduct",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDE5YTc2MWJlM2RjNzQ3OTBjNWIxNSIsImVtYWlsIjoiam9uYXRoYW4uYWJhZEBlbWFpbC5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2OTE0NTgyNDl9.9CYoxLmi5pkXjvChCUzXu9nzoftlbXYM6QSka8v3sCw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/e-commerce/products/64d421cf678ca0b80c422548/activate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"e-commerce",
+								"products",
+								"64d421cf678ca0b80c422548",
+								"activate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

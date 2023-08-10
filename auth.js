@@ -6,7 +6,7 @@ module.exports.createAccessToken = (user) => {
   const user_data = {
     id: user._id,
     email: user.email,
-    name: user.name,
+    name: user.name, //i added this to get the name of the user to put in the checkout
     isAdmin: user.isAdmin,
   };
 

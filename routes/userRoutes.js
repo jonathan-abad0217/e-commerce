@@ -47,10 +47,17 @@ router.put(
   }
 );
 
+// add/edit to cart for authenticated user
 router.post("/addToCart", auth.verify, (request, response) => {
   userController.addToCart(request, response);
 });
 
+// remove product in cart
+router.delete("/cart/:productId", auth.verify, (request, response) => {
+  userController.removeFromCart(request, response);
+});
+
+// place order/ checkout of the cart of user
 router.post("/place-order", auth.verify, (request, response) => {
   userController.placeOrder(request, response);
 });

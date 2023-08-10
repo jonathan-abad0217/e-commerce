@@ -6,6 +6,7 @@ const Product = require("../models/Product");
 const Cart = require("../models/Cart");
 const Order = require("../models/Order");
 
+// register user
 module.exports.registerUser = (user_body) => {
   const {
     name,
@@ -65,12 +66,14 @@ module.exports.loginUser = (request, response) => {
     .catch((error) => response.send(error));
 };
 
+// get all orders
 module.exports.getAllOrders = (request, response) => {
   return Order.find({}).then((orders) => {
     return response.send(orders);
   });
 };
 
+// get orders of users that is authenticated
 module.exports.getUserOrders = async (request, response) => {
   const userId = request.user.id;
 
@@ -90,6 +93,7 @@ module.exports.getUserOrders = async (request, response) => {
   }
 };
 
+// get details of the user
 module.exports.getDetails = (user) => {
   return User.findById({ _id: user.id }).then((result, error) => {
     if (error) {
@@ -108,6 +112,166 @@ module.exports.getDetails = (user) => {
     };
   });
 };
+
+// set user as admin
+module.exports.setAsAdmin = (request, response) => {
+  let set_asAdmin = {
+    isAdmin: true,
+  };
+  return User.findByIdAndUpdate(request.params.id, set_asAdmin)
+    .then((result, error) => {
+      if (error) {
+        return response.send({
+          message: error.message,
+        });
+      }
+      return response.send({
+        message: "User has been set to admin",
+      });
+    })
+    .catch((error) => console.log(error));
+};
+
+// add to cart / edit cart
+module.exports.addToCart = async (request, response) => {
+  if (request.user.isAdmin) {
+    return response.status(403).json({
+      message: "Action Forbidden",
+    });
+  }
+  const userId = request.user.id;
+  const productsToUpdate = request.body;
+
+  try {
+    let cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      cart = new Cart({
+        userId,
+        products: [],
+        totalAmount: 0,
+      });
+    }
+
+    for (const productInfo of productsToUpdate) {
+      const { productId, quantity } = productInfo;
+      const product = await Product.findById(productId);
+
+      if (!product) {
+        return response.status(404).json({
+          error: `Product with ID ${productId} not found`,
+        });
+      }
+
+      const existingProduct = cart.products.find(
+        (p) => p.productId === productId
+      );
+
+      if (existingProduct) {
+        cart.totalAmount -= existingProduct.total; // Subtract old total
+
+        existingProduct.quantity = quantity; //get quantity
+        existingProduct.total = product.price * quantity; //compute the new price
+
+        cart.totalAmount += existingProduct.total; // Add new total
+      } else {
+        const total = product.price * quantity;
+        cart.products.push({
+          productId,
+          productName: product.name,
+          quantity,
+          total,
+        });
+        cart.totalAmount += total;
+      }
+    }
+
+    await cart.save();
+
+    return response.json({
+      message: "Products quantities updated in cart successfully",
+      userCart: cart,
+    });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({
+      error: "Internal server error",
+    });
+  }
+};
+
+// Remove product from Cart
+module.exports.removeFromCart = async (request, response) => {
+  const userId = request.user.id;
+  const { productId } = request.params;
+
+  try {
+    const cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      return response.send({
+        message: "Cart not found",
+      });
+    }
+    const removedProduct = cart.products.find((p) => p.productId === productId);
+    if (!removedProduct) {
+      return response.send({
+        error: `Product with ID ${productId} not found in the cart`,
+      });
+    }
+    cart.totalAmount -= removedProduct.total;
+    cart.products = cart.products.filter((p) => p.productId !== productId);
+
+    await cart.save();
+
+    return response.send({
+      message: "Product removed from cart successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({
+      error: "Internal server error",
+    });
+  }
+};
+
+// Place order when user is ready to checkout, the cart of the user will be cleared after checkout and saved in order model
+module.exports.placeOrder = async (request, response) => {
+  const userId = request.user.id;
+
+  try {
+    // Find the user's cart
+    const cart = await Cart.findOne({ userId });
+    if (!cart || cart.products.length === 0) {
+      return response.status(400).json({ error: "Cart is empty" });
+    }
+
+    // Create an order from the cart
+    const order = new Order({
+      userId,
+      userName: request.user.name,
+      products: cart.products,
+      totalAmount: cart.totalAmount,
+    });
+
+    // Clear the user's cart
+    cart.products = [];
+    cart.totalAmount = 0;
+    await cart.save();
+
+    // Save the order
+    await order.save();
+    console.log(order);
+    response
+      .status(201)
+      .json({ message: "Order placed successfully", data: order });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// the first user create order before adding add to cart and place order
 
 module.exports.order = (request, response) => {
   if (request.user.isAdmin) {
@@ -175,116 +339,4 @@ module.exports.order = (request, response) => {
         error: error.message,
       });
     });
-};
-
-// set user as admin
-module.exports.setAsAdmin = (request, response) => {
-  let set_asAdmin = {
-    isAdmin: true,
-  };
-  return User.findByIdAndUpdate(request.params.id, set_asAdmin)
-    .then((result, error) => {
-      if (error) {
-        return response.send({
-          message: error.message,
-        });
-      }
-      return response.send({
-        message: "User has been set to admin",
-      });
-    })
-    .catch((error) => console.log(error));
-};
-
-module.exports.addToCart = async (request, response) => {
-  const userId = request.user.id;
-  const productsToAdd = request.body;
-
-  try {
-    let cart = await Cart.findOne({ userId });
-
-    if (!cart) {
-      cart = new Cart({
-        userId,
-        products: [],
-        totalAmount: 0,
-      });
-    }
-
-    for (const productInfo of productsToAdd) {
-      const { productId, quantity } = productInfo;
-      const product = await Product.findById(productId);
-
-      if (!product) {
-        return response.status(404).json({
-          error: `Product with ID ${productId} not found`,
-        });
-      }
-
-      const total = product.price * quantity;
-
-      const existingProduct = cart.products.find(
-        (p) => p.productId === productId
-      );
-      if (existingProduct) {
-        existingProduct.quantity += quantity;
-        existingProduct.total += total;
-      } else {
-        cart.products.push({
-          productId,
-          productName: product.name,
-          quantity,
-          total,
-        });
-      }
-
-      cart.totalAmount += total;
-    }
-
-    await cart.save();
-
-    return response.json({
-      message: "Products added to cart successfully",
-    });
-  } catch (error) {
-    console.error(error);
-    response.status(500).json({
-      error: "Internal server error",
-    });
-  }
-};
-
-module.exports.placeOrder = async (request, response) => {
-  const userId = request.user.id;
-
-  try {
-    // Find the user's cart
-    const cart = await Cart.findOne({ userId });
-    if (!cart || cart.products.length === 0) {
-      return response.status(400).json({ error: "Cart is empty" });
-    }
-
-    // Create an order from the cart
-    const order = new Order({
-      userId,
-      userName: request.user.name,
-      products: cart.products,
-      totalAmount: cart.totalAmount,
-    });
-
-    // Clear the user's cart
-    cart.products = [];
-    cart.totalAmount = 0;
-    await cart.save();
-
-    // Save the order
-    await order.save();
-    console.log(order);
-    response
-      .status(201)
-      .json({ message: "Order placed successfully", data: order });
-  } catch (error) {
-    console.error(error);
-    response.status(500).json({ error: "Internal server error" });
-  }
 };
